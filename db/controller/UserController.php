@@ -296,7 +296,7 @@ class UserController extends Messages {
 
                     /// Atualizando tabela de usuários...
                     $users->update_dns_users(array(
-                        'email' => $this->email, 'password' => $support->bcrypt_hash_encode($this->_post["password"]), 'id' => $this->id_user,
+                        'email' => $this->_post["email"], 'password' => $support->bcrypt_hash_encode($this->_post["password"]), 'id' => $this->id_user,
                         'url_path' => $new_name."-".$ext, 'name' => $this->_post['name'], 'update_data_access' => true
                     ));
 

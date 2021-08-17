@@ -255,6 +255,10 @@ class Users extends Messages {
         }
     }
 
+    protected function createNewAccount() {
+        //
+    }
+
     public function createNewUserAccess()
     {
         if (!$this->checkuserexists($this->_post["email"]))

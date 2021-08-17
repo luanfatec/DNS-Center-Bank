@@ -178,7 +178,7 @@ if (!isset($_SESSION["hash_pay"])) {
 
             <div class="form-group col-md-4">
               <label for="value-target">Valor a transferir</label>
-              <input  type='text' class="form-control" id="value-target">
+              <input type='text' class="form-control" id="value-target">
             </div>
 
             <div class="form-group col-md-4">

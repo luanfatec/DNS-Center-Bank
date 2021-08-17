@@ -169,7 +169,7 @@ $(window).ready(function () {
 
 /// start Format Value
 
-$('input[type="text"]').on('blur', function() {
+$('input[type="text"]#value-target').on('blur', function() {
     const value = this.value.replace(/,/g, '');
     this.value = parseFloat(value).toLocaleString('en-US', {
         style: 'decimal',
