@@ -255,8 +255,35 @@ class Users extends Messages {
         }
     }
 
-    protected function createNewAccount() {
-        //
+    protected function checkAccountInDB($account)
+    {
+        $connection = new DBConnection();
+        $stmt = $connection->prepare("SELECT * FROM dns_account WHERE ac_account = :account");
+        $stmt->bindValue(":account", $account);
+        $stmt->execute();
+
+        if ($stmt->rowCount()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    protected function createdAccount()
+    {
+        $connection = new DBConnection();
+        $connection->connect();
+
+        $newAccount = rand(5,5);
+        do {
+            $newAccount = rand(5,5);
+        } while (!$this->checkAccountInDB($newAccount));
+
+        $stmt = $connection->prepare("INSERT INTO dns_account (fk_id_user, ac_account, ac_agency, ac_balance, ac_blocked_balance) VALUES (LAST_INSERT_ID(), :ac_account, `18987`, 0, 0)");
+        $stmt->bindValue(":ac_account", $newAccount);
+        $stmt->execute();
+
+        return $stmt;
     }
 
     public function createNewUserAccess()
@@ -265,6 +292,7 @@ class Users extends Messages {
         {
             $support = new Support();
             $password = $support->bcrypt_hash_encode($this->_post["password"]);
+
             try {
                 $connection = new DBConnection();
                 $connection->connect();
@@ -275,6 +303,7 @@ class Users extends Messages {
                 $stmt->execute();
                 if ($stmt->rowCount())
                 {
+                    $this->createdAccount();
                     return array("message" => $this->getMessages("CreateNewUserSuccess"), "status" => true);
                 } else
                 {

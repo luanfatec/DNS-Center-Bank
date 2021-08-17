@@ -41,8 +41,9 @@ $(window).ready(function() {
             email: $("#input-username-register").val(),
             password: $("#input-password-register").val(), action: "register"
         }, function (response) {
+            console.log(response)
             const resp = JSON.parse(response);
-            console.log(resp)
+
             if (response.status)
             {
                 Notify({ message: resp.message, color: "green"});
