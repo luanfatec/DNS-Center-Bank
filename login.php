@@ -17,6 +17,12 @@ if ($_POST["action"] == "login")
     } else {
         echo json_encode($routes->login());
     }
+} elseif ($_POST["action"] == "register")
+{
+    $routes = new Route();
+    $routes->__set("new_user_data", $_POST);
+    echo $routes->createNewUserAccess();
+
 } elseif ($_POST["action"] == "logout")
 {
     $routes = new Route();

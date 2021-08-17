@@ -13,7 +13,9 @@ if (isset($_SESSION["hash_pay"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
     <title>DNS Center Bank</title>
 
@@ -76,7 +78,7 @@ if (isset($_SESSION["hash_pay"])) {
             margin: 10px;
         }
 
-        button#btn-login {
+        button#btn-login, button#btn-register {
             background-color: gray;
             transform: none;
             transition: none;
@@ -84,8 +86,22 @@ if (isset($_SESSION["hash_pay"])) {
             outline: none;
         }
 
-        button#btn-login:focus {
+        button#btn-login:focus,
+        button#btn-register:focus {
             outline: none;
+        }
+
+        #create-account-lk, #login-account-lk {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #ffca00;
+            cursor: pointer;
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            #section-header .title-system h1 {
+                font-size: 1rem;
+            }
         }
 
     </style>
@@ -105,30 +121,71 @@ if (isset($_SESSION["hash_pay"])) {
                 <img src="images/logo1.png" class="img-fluid" id="logo-login">
             </div>
 
-            <form class="row g-3 needs-validation">
+            <form class="row g-3 needs-validation" style="display: block" id="login-form">
 
                 <div class="col-md-12">
-<!--                    <label for="input-username" class="form-label">Conta</label>-->
                     <div class="input-group has-validation">
                         <span class="input-group-text" id="validationTooltipUsernamePrepend">Conta</span>
-                        <input type="email" class="form-control" id="input-username" value="silva@outlook.com.br" required>
+                        <input type="email" class="form-control" id="input-username" required/>
                     </div>
                 </div>
 
                 <div class="col-md-12 mt-4">
-<!--                    <label for="input-password" class="form-label">Senha</label>-->
                     <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">Senha</span>
-                        <input type="password" class="form-control" id="input-password" value="julia" required>
+                        <input type="password" class="form-control" id="input-password" required/>
                     </div>
                 </div>
 
-                <div class="col-12 mt-4">
-                    <button id="btn-login" class="btn" type="submit">Acessar</button>
+                <div class="col-12 mt-4 row">
+                    <div class="col-7">
+                        <button id="btn-login" class="btn" type="submit">Acessar</button>
+                    </div>
+                    <div class="col-5">
+                        <span id="create-account-lk" style="float: right">Criar uma conta</span>
+                    </div>
                 </div>
 
                 <div class="col-12 mt-4 text-center">
                     <span id="span-notify" class="text-danger"></span>
+                </div>
+
+            </form>
+
+            <form class="row g-3 needs-validation" style="display: none" id="form-register" name="form-register">
+
+                <div class="col-md-12 mt-4">
+                    <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">Nome</span>
+                        <input type="text" class="form-control" id="input-name-register" required/>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="input-group has-validation">
+                        <span class="input-group-text" id="validationTooltipUsernamePrepend">Conta</span>
+                        <input type="email" class="form-control" id="input-username-register" required/>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt-4">
+                    <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">Senha</span>
+                        <input type="password" class="form-control" id="input-password-register" required/>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-4 row">
+                    <div class="col-7">
+                        <button id="btn-register" class="btn" type="submit">Cadastrar</button>
+                    </div>
+                    <div class="col-5">
+                        <span id="login-account-lk" style="float: right">Fazer login</span>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-4 text-center">
+                    <span id="span-notify-register" class="text-danger" style="color: #00ff00!important"></span>
                 </div>
 
             </form>
@@ -146,6 +203,7 @@ if (isset($_SESSION["hash_pay"])) {
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script src="./inc/js/login.js"></script>
 </body>
 </html>

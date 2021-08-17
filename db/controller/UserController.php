@@ -33,6 +33,11 @@ class UserController extends Messages {
     protected $email;
 
     /**
+     * @var
+     */
+    protected $new_user_data;
+
+    /**
      * @param $name
      * @param $value
      */
@@ -69,9 +74,7 @@ class UserController extends Messages {
             $_SESSION["hash_pay"] = session_id($data["email"]);
             $_SESSION["email"] = $data["email"];
             $_SESSION["name"] = $data["name"];
-            $_SESSION["created_at"] = $data["created_at"];
             $_SESSION["id_user"] = $data["id"];
-            $_SESSION["url_profile"] = $data["url_profile"];
             return true;
         }
     }
@@ -176,14 +179,16 @@ class UserController extends Messages {
      * @return bool
      */
     public function upload_img() {
-        $ext = strtolower(substr($this->_files['img_profile']['name'],-4));
-        $new_name = strtolower(str_replace(' ', '', $this->_post['name'])) . $ext;
-        $dir = './inc/profile/';
-        if (file_exists($dir.$new_name.$ext)) {
-            unlink($dir.$new_name.$ext);
-        }
-        if (move_uploaded_file($this->_files['img_profile']['tmp_name'], $dir.$new_name)) {
-            return true;
+        if ($this->_files) {
+            $ext = strtolower(substr($this->_files['img_profile']['name'],-4));
+            $new_name = strtolower(str_replace(' ', '', $this->_post['name'])) . $ext;
+            $dir = './inc/profile/';
+            if (file_exists($dir.$new_name.$ext)) {
+                unlink($dir.$new_name.$ext);
+            }
+            if (move_uploaded_file($this->_files['img_profile']['tmp_name'], $dir.$new_name)) {
+                return true;
+            }
         }
         return false;
     }
@@ -249,7 +254,7 @@ class UserController extends Messages {
 
 
         /// Valida se uma imagem foi selecionada.
-        if (isset($this->_files[''])) {
+        if (isset($this->_files["img_profile"]["name"])) {
             header("location:edit-profile.php?status=false&message=".$this->getMessages('ErrorUpdatePersonalSelectImage'));
         }
 
@@ -332,7 +337,7 @@ class UserController extends Messages {
                         "pd_district" => $this->_post["district"], "pd_city" => $this->_post["city"], "pd_uf" => $this->_post["state-select"]
                     ));
 
-                    header("location:edit-profile.php?status=false&message=".$this->getMessages('UpdatePersonalSuccess'));
+                    header("location:edit-profile.php?status=true&message=".$this->getMessages('UpdatePersonalSuccess'));
 
                 } elseif ($users->checkExistsUserPersonal($this->id_user)) {
 
@@ -349,11 +354,28 @@ class UserController extends Messages {
                         "pd_district" => $this->_post["district"], "pd_city" => $this->_post["city"], "pd_uf" => $this->_post["state-select"]
                     ));
 
-                    header("location:edit-profile.php?status=false&message=".$this->getMessages('UpdatePersonalSuccess'));
+                    header("location:edit-profile.php?status=true&message=".$this->getMessages('UpdatePersonalSuccess'));
                 }
             }
 
         }
 
+    }
+
+
+    /**
+     * @return false|string
+     */
+    public function load_user_data()
+    {
+        $users = new Users();
+        return json_encode($users->getUsersDataPersonal($this->id_user));
+    }
+
+    public function createNewUserAccess()
+    {
+        $users = new Users();
+        $users->__set("_post", $this->new_user_data);
+        return json_encode($users->createNewUserAccess());
     }
 }

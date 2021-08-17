@@ -44,7 +44,6 @@ function MessageDialogTransactionRecv(config) {
 }
 /// End Message Transaction Dialog Config
 
-
 /// Start Action Run Data Account
 function load_data() {
 
@@ -58,18 +57,30 @@ function load_data() {
         $("#account_number").text(data.ac_account);
     });
 }
+if (document.location.href.split("/")[4] === "painel.php") {
+    $.post("api.php", {
+        action: "load_user"
+    }).then(function (response) {
+        let resp = JSON.parse(response);
+        console.log(resp.data)
+    });
+}
 /// End Action Run Data Account
 
+/// Stat load data transfer
 function load_data_transfer() {
+
     if (window.location.pathname === "/SiteHTML-Bootstrap/painel.php") {
+
         $.post("api.php", {
             action: "return_transactions",
             account_number: document.getElementById("account_number").innerText
         }, function (response) {
+
             const resp = JSON.parse(response);
             document.getElementById('log-content-transactions').innerHTML = "";
 
-            if (resp.status) {
+            if (!resp.status) {
                 for (let dt of resp) {
                     if (document.getElementById("account_number").innerText === dt.ac_account_destiny) {
                         $("#log-content-transactions").append(MessageDialogTransactionRecv({
@@ -92,6 +103,60 @@ function load_data_transfer() {
         });
     }
 }
+/// Stop load data transfer
+
+/// Start load data_user
+function load_data_user(flag) {
+    $.post("api.php", {
+        action: "load_user_data"
+    }).then(function (response) {
+
+        if (flag === "edit-profile") {
+            let resp = JSON.parse(response);
+
+            if (resp.status) {
+                Notify({message: resp.message, color: "red"});
+            } else {
+                $("#name").val(resp.data.name);
+                $("#age").val(resp.data.pd_age);
+                $("#data_birth").val(resp.data.pd_data_birth);
+                $("#document").val(resp.data.pd_document);
+                $("#ident").val(resp.data.pd_ident);
+                $("#sex-select").val(resp.data.pd_sex);
+                $("#zip_code").val(resp.data.pd_zip_code);
+                $("#number").val(resp.data.pd_number);
+                $("#public_place").val(resp.data.pd_public_place);
+                $("#district").val(resp.data.pd_district);
+                $("#city").val(resp.data.pd_city);
+                $("#state-select").val(resp.data.pd_uf);
+                $("#email").val(resp.data.email);
+                $("#name-proofile-image").text(resp.data.name);
+                $("#img-box-profile").attr("src", `inc/profile/${resp.data.url_profile.replace('-', '.')}`);
+            }
+        } else if (flag === "painel") {
+            let resp = JSON.parse(response);
+            if (resp.status) {
+                Notify({message: resp.message, color: "red"});
+            } else {
+                $("#name").val(resp.data.name);
+                $("#name-proofile-image").text(resp.data.name);
+                $("#img-box-profile").attr("src", `inc/profile/${resp.data.url_profile.replace('-', '.')}`);
+            }
+        }
+    });
+}
+
+
+$(window).ready(() => {
+
+    if (document.location.href.split("/")[4] === "edit-profile.php" || document.location.href.split("/")[4].split("?")[0] === "edit-profile.php") {
+        load_data_user('edit-profile')
+    } else if (window.location.href.split("/")[4] === "painel.php") {
+        load_data_user('painel')
+    }
+});
+
+/// Stop load data_user
 
 /// Start Load Datas
 $(window).ready(function () {
@@ -100,40 +165,18 @@ $(window).ready(function () {
     setInterval(function () { load_data() }, 1000);
 
 });
-
 /// End Load Datas
 
 /// start Format Value
-try {
-    var currencyInput = document.querySelector('input[type="currency"]');
-    var currency = 'BRL'; // https://www.currency-iso.org/dam/downloads/lists/list_one.xml
-// format inital value
-    onBlur({target:currencyInput});
-// bind event listeners
-    currencyInput.addEventListener('focus', onFocus);
-    currencyInput.addEventListener('blur', onBlur);
 
-    function localStringToNumber( s ){
-        return Number(String(s).replace(/[^0-9.-]+/g,""));
-    }
-    function onFocus(e){
-        var value = e.target.value;
-        e.target.value = value ? localStringToNumber(value) : ''
-    }
-    function onBlur(e){
-        var value = e.target.value;
-        var options = {
-            maximumFractionDigits : 2,
-            currency              : currency,
-            style                 : "currency",
-            currencyDisplay       : "symbol"
-        }
-        e.target.value = (value || value === 0)
-            ? localStringToNumber(value).toLocaleString(undefined, options)
-            : ''
-    }
-} catch (e) {
-}
+$('input[type="text"]').on('blur', function() {
+    const value = this.value.replace(/,/g, '');
+    this.value = parseFloat(value).toLocaleString('en-US', {
+        style: 'decimal',
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2
+    });
+});
 /// End Format Value
 
 /// Start transfer
@@ -168,7 +211,6 @@ $("#btn-unblocked").click(function () {
         action: "unblocked",
         value_blocked: parseFloat(document.getElementById('blocked_balance').innerText)
     }, function (response) {
-        console.log(response)
         let resp = JSON.parse(response);
 
         if (resp.status) {
@@ -217,7 +259,7 @@ $("#exit-system-action").click(() => {
 function configDetails(config) {
     return `<div class="card">
               <div class="card-body">
-                <h5 class="card-title">Destino: ${config.resp.name}</h5>
+                <h5 class="card-title">${config.originOrDestino}: ${config.resp.name}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">${config.type}</h6>
                 <p class="card-text">
                     <ul class="" style="list-style: none; border-left: 2px solid #3498db">
@@ -246,6 +288,7 @@ function load_details_trasactions(id) {
                         }
                     },
                     content: configDetails({
+                        originOrDestino: "Origem",
                         li: `Uma transação foi recebida de ${resp.name} no dia ${formatDateTransfer(resp.created_at, 'date')} as ${formatDateTransfer(resp.created_at, 'hour')}
                         <br/>
                         <hr/>
@@ -274,6 +317,7 @@ function load_details_trasactions(id) {
                         }
                     },
                     content: configDetails({
+                        originOrDestino: "Destino",
                         li: `Uma transação realizada para ${resp.name} no dia ${formatDateTransfer(resp.created_at, 'date')} as ${formatDateTransfer(resp.created_at, 'hour')}
                         <br/>
                         <hr/>
@@ -342,6 +386,20 @@ function checkZipCode() {
 }
 /// End check Zip Code
 
+
+/// Start Load IMG Preview
+// Code Pen: https://codepen.io/mobifreaks/pen/LIbca
+function loadImage(input) {
+    if (input.files && input.files[0]) {
+        let fr = new FileReader();
+        fr.onload = function (e) {
+            $('#img-box-profile').attr('src', e.target.result);
+        };
+
+        fr.readAsDataURL(input.files[0]);
+    }
+}
+/// Stop Load IMG Preview
 
 
 

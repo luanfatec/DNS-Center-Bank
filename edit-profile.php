@@ -174,15 +174,14 @@ if (isset($_GET['message']) and isset($_GET['status'])) {
 
                     <div>
                         <div>
-                            <img class="img-box-profile border-gray" src=<?php echo "inc/profile/".str_replace("-", ".", $_SESSION["url_profile"])?> width="100" align="center">
+                            <img class="img-box-profile border-gray" id="img-box-profile" width="100">
                         </div>
                     </div>
 
                     <div class="profile-body">
-                        <h4><?=$_SESSION['name']?></h4>
-
+                        <h4 id="name-proofile-image"></h4>
                         <div class="form-group mt-5">
-                            <input type="file" class="form-control" id="inp-select-image-profile" name="img_profile">
+                            <input type="file" class="form-control" id="inp-select-image-profile" name="img_profile" onchange="loadImage(this)">
                         </div>
                     </div>
 
@@ -200,27 +199,27 @@ if (isset($_GET['message']) and isset($_GET['status'])) {
 
                         <div class="col-md-4 form-group">
                             <label for="name">Nome:</label>
-                            <input type="text" class="form-control" name="name" id="name" value="<?=$_SESSION['name']?>">
+                            <input type="text" class="form-control" name="name" id="name">
                         </div>
 
                         <div class="col-md-4 form-group">
                             <label for="age">Idade:</label>
-                            <input type="text" class="form-control" name="age" id="age" value="21">
+                            <input type="text" class="form-control" name="age" id="age" >
                         </div>
 
                         <div class="col-md-4 form-group">
                             <label for="data_birth">Data de Nascimento:</label>
-                            <input type="date" class="form-control" name="data_birth" id="data_birth" value="1999-11-14">
+                            <input type="date" class="form-control" name="data_birth" id="data_birth">
                         </div>
 
                         <div class="col-md-4 form-group">
                             <label for="document">CPF:</label>
-                            <input type="text" class="form-control" name="document" id="document" value="47659873881">
+                            <input type="text" class="form-control" name="document" id="document" >
                         </div>
 
                         <div class="col-md-4 form-group">
                             <label for="ident">RG:</label>
-                            <input type="text" class="form-control" name="ident" id="ident" value="567311569">
+                            <input type="text" class="form-control" name="ident" id="ident">
                         </div>
 
                         <div class="col-md-4 form-group">
@@ -272,7 +271,7 @@ if (isset($_GET['message']) and isset($_GET['status'])) {
 
                         <div class="col-md-4 form-group">
                             <label for="">E-mail:</label>
-                            <input type="email" class="form-control" name="email" value="<?= $_SESSION['email']?>">
+                            <input type="email" class="form-control" name="email" id="email">
                         </div>
 
                         <div class="col-md-4 form-group">
@@ -325,7 +324,12 @@ if (isset($_GET['message']) and isset($_GET['status'])) {
 <script>
     let msg = "<?php echo $msg;?>"
     if (msg === 'on') {
-        Notify({message: "<?php echo $message?>", color: "red"});
+        let status = "<?php echo $status;?>"
+        if (status === "true") {
+            Notify({message: "<?php echo $message?>", color: "green"});
+        } else {
+            Notify({message: "<?php echo $message?>", color: "red"});
+        }
     }
 </script>
 </body>

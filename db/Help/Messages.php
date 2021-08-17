@@ -143,6 +143,31 @@ class Messages
     private $UpdatePersonalError = "Houve um erro ao tenmtar salvar os dados, por favor, entre em contato com seu gerente.";
 
     /**
+     * @var string
+     */
+    private $UpdateErrorNotExistisDataPersonal = "Você ainda não possui um endereço cadastrado, por favor, cadastre um imediatamente.";
+
+    /**
+     * @var string
+     */
+    private $UpdateErrorExceptionProgram = "Houve um erro de excessão, por favor, entre em contato com seu gerente.";
+
+    /**
+     * @var string
+     */
+    private $CreateNewUserSuccess = "Sua conta foi criada com sucesso, aproveite.";
+
+    /**
+     * @var string
+     */
+    private $CreateNewUserError = "Não foi possível criar sua conta, por favor verifique os dados informado ou entre em contato com um de nossos atendentes.";
+
+    /**
+     * @var string
+     */
+    private $CreateNewUserErrorExists = "E-mail informado já existe em nosso sistema.";
+
+    /**
      * @param $name
      * @return mixed
      */

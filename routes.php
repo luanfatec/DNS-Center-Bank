@@ -44,6 +44,11 @@ class Route extends Messages {
     protected $account_number;
 
     /**
+     * @var
+     */
+    protected $new_user_data;
+
+    /**
      * @param $attr
      * @param $value
      */
@@ -123,6 +128,9 @@ class Route extends Messages {
         return $transferController->return_transaction_details();
     }
 
+    /**
+     * Not Return Value
+     */
     public function update_personal()
     {
         $userController = new UserController();
@@ -130,7 +138,23 @@ class Route extends Messages {
         $userController->__set('_post', $_POST);
         $userController->__set('id_user', $this->id_user);
         $userController->__set('email', $this->email);
-        return $userController->update_personal();
+        $userController->update_personal();
     }
-    
+
+    /**
+     * @return false|string
+     */
+    public function load_user_data()
+    {
+        $userController = new UserController();
+        $userController->__set('id_user', $this->id_user);
+        return $userController->load_user_data();
+    }
+
+    public function createNewUserAccess()
+    {
+        $userController = new UserController();
+        $userController->__set('new_user_data', $this->new_user_data);
+        return $userController->createNewUserAccess();
+    }
 }

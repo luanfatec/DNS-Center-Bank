@@ -203,12 +203,12 @@ if (!isset($_SESSION["hash_pay"])) {
 
                     <div>
                         <div>
-                            <img class="img-box-profile border-gray" src=<?php echo "inc/profile/".str_replace("-", ".", $_SESSION["url_profile"])?> width="100" align="center">
+                            <img id="img-box-profile" class="img-box-profile border-gray" width="100" align="center">
                         </div>
                     </div>
 
                     <div class="profile-body">
-                        <h4><?= $_SESSION["name"]; ?></h4>
+                        <h4 id="name-proofile-image"></h4>
                         <p>
                             Seja bem vindo(a) <span>&#128512;</span>
                         </p>

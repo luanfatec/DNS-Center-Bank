@@ -8,11 +8,24 @@ use DB\DBConnection;
 use db\Messages\Messages;
 use DB\Support\Support;
 
+/**
+ *
+ */
 class Users extends Messages {
 
+    /**
+     * @var
+     */
     protected $_files;
+    /**
+     * @var
+     */
     protected $_post;
 
+    /**
+     * @param $name
+     * @param $value
+     */
     public function __set($name, $value)
     {
         $this->$name = $value;
@@ -52,6 +65,10 @@ class Users extends Messages {
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @param $email
+     * @return false|mixed
+     */
     public function checkuserexists($email)
     {
         try {
@@ -66,6 +83,10 @@ class Users extends Messages {
         }
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     public function update_dns_users($data)
     {
         if ($data['update_data_access']) {
@@ -105,6 +126,10 @@ class Users extends Messages {
         }
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public function checkExistsUserPersonal($id)
     {
         try {
@@ -124,6 +149,10 @@ class Users extends Messages {
         }
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     public function personal_insert($data)
     {
         try {
@@ -160,6 +189,10 @@ class Users extends Messages {
         }
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     public function personal_update($data)
     {
         try {
@@ -193,5 +226,63 @@ class Users extends Messages {
         } catch (\PDOException $err) {
             return false;
         }
+    }
+
+    /**
+     * @param $id_user
+     * @return array
+     */
+    public function getUsersDataPersonal($id_user)
+    {
+        try {
+            $connection = new DBConnection();
+            $connection->connect();
+            $stmt = $connection->prepare("
+        SELECT 
+            dns_users.name, dns_users.url_profile, dns_users.email, dns_personal_data.pd_age, dns_personal_data.pd_data_birth, dns_personal_data.pd_document, dns_personal_data.pd_ident, dns_personal_data.pd_sex,
+            dns_personal_data.pd_zip_code, dns_personal_data.pd_public_place, dns_personal_data.pd_number, dns_personal_data.pd_district, dns_personal_data.pd_city, dns_personal_data.pd_uf
+        FROM dns_users INNER JOIN dns_personal_data ON dns_personal_data.pd_id_user_fk = dns_users.id WHERE pd_id_user_fk=:id;
+        ");
+            $stmt->bindValue(":id", $id_user);
+            $stmt->execute();
+            if ($stmt->rowCount()) {
+                return array("data" => $stmt->fetch(\PDO::FETCH_ASSOC));
+            } else {
+                return array("status" => true, "message" => $this->getMessages("UpdateErrorNotExistisDataPersonal"));
+            }
+        } catch (\PDOException $err) {
+            return array("status" => false, "message" => $this->getMessages("UpdateErrorExceptionProgram"));
+        }
+    }
+
+    public function createNewUserAccess()
+    {
+        if (!$this->checkuserexists($this->_post["email"]))
+        {
+            $support = new Support();
+            $password = $support->bcrypt_hash_encode($this->_post["password"]);
+            try {
+                $connection = new DBConnection();
+                $connection->connect();
+                $stmt = $connection->prepare("INSERT INTO dns_users (name, email, password) VALUES (:name, :email, :password)");
+                $stmt->bindValue(":name", $this->_post["name"]);
+                $stmt->bindValue(":email", $this->_post["email"]);
+                $stmt->bindValue(":password", $password);
+                $stmt->execute();
+                if ($stmt->rowCount())
+                {
+                    return array("message" => $this->getMessages("CreateNewUserSuccess"), "status" => true);
+                } else
+                {
+                    return array("message" => $this->getMessages("CreateNewUserError"), "status" => false);
+                }
+            } catch (\PDOException $err) {
+                return array("message" => $this->getMessages("CreateNewUserError"), "status" => false);
+            }
+        }
+        else {
+            return array("message" => $this->getMessages("CreateNewUserErrorExists"), "status" => false);
+        }
+
     }
 }

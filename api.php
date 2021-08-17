@@ -21,12 +21,14 @@ if (isset($_POST['action'])) {
         $routes->__set("id_user", $_SESSION["id_user"]);
         $routes->__set("account_number", $_POST["account_number"]);
         echo $routes->return_transactions();
+    } elseif ($_POST["action"] === "load_user_data") {
+        $routes = new Route();
+        $routes->__set("id_user", $_SESSION["id_user"]);
+        echo $routes->load_user_data();
     }
 } else {
     $routes = new Route();
     $routes->__set('id_user', $_SESSION['id_user']);
     $routes->__set('email', $_SESSION['email']);
-    echo '<pre>';
-    var_dump($routes->update_personal());
-    echo '</pre>';
+    $routes->update_personal();
 }
