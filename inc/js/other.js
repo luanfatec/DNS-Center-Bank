@@ -401,6 +401,70 @@ function loadImage(input) {
 }
 /// Stop Load IMG Preview
 
+/// Start deposit
+function windowDeposit(config) {
+    return `<div class="card">
+              <div class="card-body">
+                <h5 class="card-title">${config.titleWindow}</h5>
+                <p class="card-text">
+                    <ul class="" style="list-style: none; border-left: 2px solid #3498db">
+                        <form id="new-deposit-form">
+                            <div class="form-group">
+                                <label for="value_for_deposit">Valor R$: </label>
+                                <input type="text" class="form-control" name="value_for_deposit" id="value_for_deposit" required>
+                                <script>
+                                    $('input#value_for_deposit').on('blur', function() {
+                                        const value = this.value.replace(/,/g, '');
+                                        this.value = parseFloat(value).toLocaleString('en-US', {
+                                            style: 'decimal',
+                                            maximumFractionDigits: 2,
+                                            minimumFractionDigits: 2
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </form>
+                    </ul>
+                </p>
+              </div>
+            </div>
+        `;
+}
+
+$("#btn-deposit").click(function () {
+    $.alert({
+        title:'',
+        type: 'blue',
+        typeAnimated: false,
+        buttons: {
+            tryAgain: {
+                text: 'Depositar',
+                action: function () {
+                    $.post("api.php", {
+                        value_for_deposit: $("#value_for_deposit").val().replace(",", ".").replace("R$", "").replace(" ", "").trim(),
+                        action: "deposit"
+                    }, (response) => {
+                        const resp = JSON.parse(response);
+
+                        if (resp.status) {
+                            Notify({message: resp.message, color: "green"});
+                        } else {
+                            Notify({message: resp.message, color: "orange"});
+                        }
+                    });
+                }
+            },
+            close: {
+                text: "Cancelar"
+            }
+        },
+        content: windowDeposit({
+            titleWindow: "Novo depósito",
+        }),
+    });
+});
+
+/// End deposit
 
 
 

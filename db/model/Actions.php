@@ -296,4 +296,28 @@ class Actions extends Messages
         }
     }
 
+    public function deposit($value_for_deposit)
+    {
+        return $this->getAccount();
+
+//        try {
+//            $connection = new DBConnection();
+//            $stmt = $connection->prepare("UPDATE dns_account SET ac_balance=:ac_balance WHERE fk_id_user=:fk_id_user;");
+//            $stmt->bindValue(":ac_balance", $value_for_deposit);
+//            $stmt->bindValue(":fk_id_user", $this->id_user);
+//            $stmt->execute();
+//            if ($stmt->rowCount())
+//            {
+//                return true;
+//            }
+//            else
+//            {
+//                return false;
+//            }
+//        } catch (\PDOException $err)
+//        {
+//            return array("status" => false);
+//        }
+    }
+
 }

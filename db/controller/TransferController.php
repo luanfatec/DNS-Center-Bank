@@ -24,6 +24,16 @@ class TransferController {
     /**
      * @var
      */
+    protected $value_for_deposit;
+
+    /**
+     * @var
+     */
+    protected $id_user;
+
+    /**
+     * @var
+     */
     protected $transfer_details;
 
     /**
@@ -81,6 +91,13 @@ class TransferController {
         $actions = new Actions();
         $actions->__set("transfer_details", $this->transfer_details);
         return json_encode($actions->return_transaction_details());
+    }
+
+    public function deposit()
+    {
+        $actions = new Actions();
+        $actions->__set('id_user', $this->id_user);
+        return json_encode($actions->deposit($this->value_for_deposit));
     }
 }
 /**

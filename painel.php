@@ -129,7 +129,7 @@ if (!isset($_SESSION["hash_pay"])) {
             margin-left: -30px;
         }
 
-        #btn-transfer, #btn-unblocked {
+        #btn-transfer, #btn-unblocked, #btn-deposit {
             background: #F29F05;
             border-radius: 10px;
             padding: 5px 28px;
@@ -170,6 +170,11 @@ if (!isset($_SESSION["hash_pay"])) {
             top: 30%;
         }
 
+        #value_for_deposit::-webkit-outer-spin-button, #value_for_deposit::-webkit-inner-spin-button{
+            display: none;
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -222,6 +227,7 @@ if (!isset($_SESSION["hash_pay"])) {
 
             <div class="col-md-7">
                 <div class="wallet-box">
+
                     <h4 class="mb-3">Minha carteira</h4>
                     <div class="row">
 
@@ -244,6 +250,10 @@ if (!isset($_SESSION["hash_pay"])) {
                             </a>
                             <a style="cursor: pointer;margin: 0 10px" id="btn-unblocked">
                                 Desbloquear
+                            </a>
+
+                            <a style="cursor: pointer;margin: 0 10px" id="btn-deposit">
+                                Depositar
                             </a>
                         </div>
                     </div>

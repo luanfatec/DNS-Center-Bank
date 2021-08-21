@@ -48,6 +48,8 @@ class Route extends Messages {
      */
     protected $new_user_data;
 
+    protected $value_for_deposit;
+
     /**
      * @param $attr
      * @param $value
@@ -156,5 +158,13 @@ class Route extends Messages {
         $userController = new UserController();
         $userController->__set('new_user_data', $this->new_user_data);
         return $userController->createNewUserAccess();
+    }
+
+    public function deposit()
+    {
+        $userController = new TransferController();
+        $userController->__set("value_for_deposit", $this->value_for_deposit);
+        $userController->__set("id_user", $this->id_user);
+        return $userController->deposit();
     }
 }
