@@ -374,6 +374,30 @@ class UserController extends Messages {
 
     public function createNewUserAccess()
     {
+        // Checando se o name foi informado corretamente...
+        if (empty($this->new_user_data["name"]) || !isset($this->new_user_data["name"]))
+        {
+             return json_encode(array("message" => $this->getMessages('CreateNewUserNameEmpty'), "status" => false));
+        }
+
+        // Checando se o e-mail foi informado corretamente...
+        if (!isset($this->new_user_data["email"]) || empty($this->new_user_data["email"]))
+        {
+            return json_encode(array("message" => $this->getMessages('CreateNewUserEmialEmpty'), "status" => false));
+        }
+
+        // Checando se o password foi informado corretamente...
+        if (!isset($this->new_user_data["password"]) || empty($this->new_user_data["password"]))
+        {
+            return json_encode(array("message" => $this->getMessages('CreateNewUserPasswordEmpty'), "status" => false));
+        }
+
+        // Checa se a senha tem mais que 8 digitos...
+        if (strlen($this->new_user_data["password"]) < 8)
+        {
+            return json_encode(array("message" => $this->getMessages('CreateNewUserPasswordSmall'), "status" => false));
+        }
+
         $users = new Users();
         $users->__set("_post", $this->new_user_data);
         return json_encode($users->createNewUserAccess());

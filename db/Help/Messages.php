@@ -165,7 +165,37 @@ class Messages
     /**
      * @var string
      */
+    private $CreateNewAccountCreate = "Houve um erro ao gerar uma conta para você, por favor, entre em contato com um de nossos atendentes.";
+
+    /**
+     * @var string
+     */
     private $CreateNewUserErrorExists = "E-mail informado já existe em nosso sistema.";
+
+    /**
+     * @var string
+     */
+    private $CreateNewUserPostEmpty = "Você não pode criar uma conta sem dados cadastrais.";
+
+    /**
+     * @var string
+     */
+    private $CreateNewUserNameEmpty = "Por favor, informe o nome.";
+
+    /**
+     * @var string
+     */
+    private $CreateNewUserEmialEmpty = "Por favor, informe um e-mail para acesso.";
+
+    /**
+     * @var string
+     */
+    private $CreateNewUserPasswordEmpty = "Por favor, informe uma senha de acesso.";
+
+    /**
+     * @var string
+     */
+    private $CreateNewUserPasswordSmall = "Por favor, informe uma senha com mais de 8 dígitos";
 
     /**
      * @param $name

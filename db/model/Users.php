@@ -274,16 +274,23 @@ class Users extends Messages {
         $connection = new DBConnection();
         $connection->connect();
 
-        $newAccount = rand(5,5);
+        $newAccount = mt_rand(10000,99999);
         do {
-            $newAccount = rand(5,5);
+            $newAccount = mt_rand(10000,99999);
         } while (!$this->checkAccountInDB($newAccount));
 
-        $stmt = $connection->prepare("INSERT INTO dns_account (fk_id_user, ac_account, ac_agency, ac_balance, ac_blocked_balance) VALUES (LAST_INSERT_ID(), :ac_account, `18987`, 0, 0)");
+        $stmt = $connection->prepare("INSERT INTO dns_account (fk_id_user, ac_account, ac_agency, ac_balance, ac_blocked_balance) VALUES (LAST_INSERT_ID(), :ac_account, 18987, 0, 0)");
         $stmt->bindValue(":ac_account", $newAccount);
         $stmt->execute();
 
-        return $stmt;
+        if ($stmt->rowCount())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public function createNewUserAccess()
@@ -301,14 +308,25 @@ class Users extends Messages {
                 $stmt->bindValue(":email", $this->_post["email"]);
                 $stmt->bindValue(":password", $password);
                 $stmt->execute();
-                if ($stmt->rowCount())
+
+                $newAccount = mt_rand(10000,99999);
+                do {
+                    $newAccount = mt_rand(10000,99999);
+                } while (!$this->checkAccountInDB($newAccount));
+
+                $stmtac = $connection->prepare("INSERT INTO dns_account (fk_id_user, ac_account, ac_agency, ac_balance, ac_blocked_balance) VALUES (LAST_INSERT_ID(), :ac_account, 18987, 0, 0)");
+                $stmtac->bindValue(":ac_account", $newAccount);
+                $stmtac->execute();
+
+                if ($stmtac->rowCount())
                 {
-                    $this->createdAccount();
                     return array("message" => $this->getMessages("CreateNewUserSuccess"), "status" => true);
                 } else
                 {
-                    return array("message" => $this->getMessages("CreateNewUserError"), "status" => false);
+                    return array("message" => $this->getMessages('CreateNewAccountCreate'), "status" => false);
                 }
+
+
             } catch (\PDOException $err) {
                 return array("message" => $this->getMessages("CreateNewUserError"), "status" => false);
             }
