@@ -1,5 +1,5 @@
 # DNS CENTER BANK
-###### Simulador de um banco digital, totalmente desenvolvido em PHP e mais tecnilogia web como HTML, CSS e JAVASCRIPT.
+###### Simulador de um banco digital, totalmente desenvolvido em PHP e mais tecnologia web como HTML, CSS e JAVASCRIPT.
 
 * Realizar transferência;
 * Receber transferências;
